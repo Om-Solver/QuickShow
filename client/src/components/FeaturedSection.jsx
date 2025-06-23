@@ -2,12 +2,13 @@ import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import BlurCircle from './BlurCircle'
-import { dummyShowsData } from '../assets/assets'
 import MovieCard from './MovieCard'
+import { useAppContext } from '../context/AppContext'
 
 const FeaturedSection = () => {
 
     const navigate = useNavigate()
+    const { shows } = useAppContext()
 
     return (
         <div className='px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden'>
@@ -22,8 +23,8 @@ const FeaturedSection = () => {
             </div>
 
             <div className='flex overflow-x-auto gap-8 mt-8 pb-4 no-scrollbar'>
-                {dummyShowsData.slice(0, 4).map((show) => (
-                    <MovieCard key={show._id} movie={show}/>
+                {shows.filter(Boolean).slice(0, 4).map((show) => (
+                    show && show._id && <MovieCard key={show._id} movie={show} />
                 ))}
             </div>
 
