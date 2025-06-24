@@ -97,16 +97,17 @@ const sendBookingConfirmationEmail = inngest.createFunction(
             return;
         }
 
+        console.log("booking.user._email value:", booking.user._email);
         if (!booking.user._email) {
             console.error(`No email found for user in booking ID: ${bookingId}`);
             return;
         }
         console.log("Sending email to:", booking.user._email);
 
-        await sendEmail({
-            to: booking.user._email,
-            subject: `Payment Confirmation: "${booking.show.movie.title}" booked!`,
-            body: `<div style="font-family: Arial, sans-serif; line-height: 1.5;">
+        await sendEmail(
+            booking.user._email,
+            `Payment Confirmation: "${booking.show.movie.title}" booked!`,
+            `<div style="font-family: Arial, sans-serif; line-height: 1.5;">
                 <h2>Hi ${booking.user._name},</h2>
                 <p>Your booking for <strong style="color: #F84565;">"${booking.show.movie.title}"</strong> is confirmed.</p>
                 <p>
@@ -116,7 +117,7 @@ const sendBookingConfirmationEmail = inngest.createFunction(
                 <p>Enjoy the show! 🍿</p>
                 <p>Thanks for booking with us!<br />- QuickShow Team</p>
             </div>`
-        })
+        )
     }
 )
 
