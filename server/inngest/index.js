@@ -97,6 +97,12 @@ const sendBookingConfirmationEmail = inngest.createFunction(
             return;
         }
 
+        if (!booking.user._email) {
+            console.error(`No email found for user in booking ID: ${bookingId}`);
+            return;
+        }
+        console.log("Sending email to:", booking.user._email);
+
         await sendEmail({
             to: booking.user._email,
             subject: `Payment Confirmation: "${booking.show.movie.title}" booked!`,
