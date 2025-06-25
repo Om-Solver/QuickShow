@@ -213,7 +213,7 @@ const sendNewShowNotifications = inngest.createFunction(
                     subject,
                     body,
                 });
-                console.log(`SMTP response for ${userEmail}:`, smtpResponse);
+                console.log(`SMTP response for ${userEmail}:`, JSON.stringify(smtpResponse, null, 2));
             } catch (err) {
                 console.error(`Failed to send email to ${userEmail}:`, err);
             }
