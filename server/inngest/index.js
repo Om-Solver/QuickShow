@@ -208,11 +208,12 @@ const sendNewShowNotifications = inngest.createFunction(
             </div>`;
 
             try {
-                await sendEmail({
+                const smtpResponse = await sendEmail({
                     to: userEmail,
                     subject,
                     body,
                 });
+                console.log(`SMTP response for ${userEmail}:`, smtpResponse);
             } catch (err) {
                 console.error(`Failed to send email to ${userEmail}:`, err);
             }
