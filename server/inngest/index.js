@@ -88,27 +88,11 @@ const sendBookingConfirmationEmail = inngest.createFunction(
             populate: { path: "movie", model: "Movie" }
         }).populate('user');
 
-        if (!booking) {
-            console.error(`Booking not found for ID: ${bookingId}`);
-            return;
-        }
-        if (!booking.user) {
-            console.error(`User not found for booking ID: ${bookingId}`);
-            return;
-        }
-
-        console.log("booking.user._email value:", booking.user._email);
-        if (!booking.user._email) {
-            console.error(`No email found for user in booking ID: ${bookingId}`);
-            return;
-        }
-        console.log("Sending email to:", booking.user._email);
-
-        await sendEmail(
-            booking.user._email,
-            `Payment Confirmation: "${booking.show.movie.title}" booked!`,
-            `<div style="font-family: Arial, sans-serif; line-height: 1.5;">
-                <h2>Hi ${booking.user._name},</h2>
+        await sendEmail({
+            to: booking.user.email,
+            subject: `Payment Confirmation: "${booking.show.movie.title}" booked!`,
+            body: `<div style="font-family: Arial, sans-serif; line-height: 1.5;">
+                <h2>Hi ${booking.user.name},</h2>
                 <p>Your booking for <strong style="color: #F84565;">"${booking.show.movie.title}"</strong> is confirmed.</p>
                 <p>
                     <strong>Date:</strong> ${new Date(booking.show.showDateTime).toLocaleDateString('en-US', { timeZone: 'Asia/Kolkata' })}<br />
@@ -117,7 +101,7 @@ const sendBookingConfirmationEmail = inngest.createFunction(
                 <p>Enjoy the show! 🍿</p>
                 <p>Thanks for booking with us!<br />- QuickShow Team</p>
             </div>`
-        )
+        })
     }
 )
 
