@@ -207,11 +207,15 @@ const sendNewShowNotifications = inngest.createFunction(
             <p>Thanks,<br/>QuickShow Team</p>
             </div>`;
 
-            await sendEmail({
-                to: userEmail,
-                subject,
-                body,
-            })
+            try {
+                await sendEmail({
+                    to: userEmail,
+                    subject,
+                    body,
+                });
+            } catch (err) {
+                console.error(`Failed to send email to ${userEmail}:`, err);
+            }
         }
 
         return { message: "Notification sent." }
