@@ -9,16 +9,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-// Verify transporter connection at startup
-transporter.verify(function(error, success) {
-    if (error) {
-        console.error("SMTP transporter verification failed:", error);
-    } else {
-        console.log("SMTP transporter is ready to send emails.");
-        console.log("SMTP_USER:", process.env.SMTP_USER);
-        console.log("SENDER_EMAIL:", process.env.SENDER_EMAIL);
-    }
-});
 
 const sendEmail = async ({ to, subject, body }) => {
     const response = await transporter.sendMail({

@@ -179,17 +179,12 @@ const sendShowReminders = inngest.createFunction(
     }
 )
 
-// Inngest Function to sed notifications when a new show is added
+// Inngest Function to send notifications when a new show is added
 const sendNewShowNotifications = inngest.createFunction(
     { id: "send-new-show-notifications" },
     { event: "app/show.added" },
-    async (event) => {
-        const { movieTitle } = event.data || {};
-
-        if (!movieTitle) {
-            console.warn("No movieTitle provided in event.data for sendNewShowNotifications");
-            return { message: "No movieTitle provided, notification not sent." };
-        }
+    async ({ event }) => {
+        const { movieTitle } = event.data;
 
         const users = await User.find({})
 
@@ -207,16 +202,11 @@ const sendNewShowNotifications = inngest.createFunction(
             <p>Thanks,<br/>QuickShow Team</p>
             </div>`;
 
-            try {
-                const smtpResponse = await sendEmail({
-                    to: userEmail,
-                    subject,
-                    body,
-                });
-                console.log(`SMTP response for ${userEmail}:`, JSON.stringify(smtpResponse, null, 2));
-            } catch (err) {
-                console.error(`Failed to send email to ${userEmail}:`, err);
-            }
+            await sendEmail({
+                to: userEmail,
+                subject,
+                body,
+            })
         }
 
         return { message: "Notification sent." }
