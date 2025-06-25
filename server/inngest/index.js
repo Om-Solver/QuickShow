@@ -184,7 +184,12 @@ const sendNewShowNotifications = inngest.createFunction(
     { id: "send-new-show-notifications" },
     { event: "app/show.added" },
     async (event) => {
-        const { movieTitle } = event.data;
+        const { movieTitle } = event.data || {};
+
+        if (!movieTitle) {
+            console.warn("No movieTitle provided in event.data for sendNewShowNotifications");
+            return { message: "No movieTitle provided, notification not sent." };
+        }
 
         const users = await User.find({})
 
